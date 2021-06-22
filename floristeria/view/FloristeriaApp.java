@@ -1,10 +1,12 @@
 package floristeria.view;
 
 public class FloristeriaApp {
+	
+	private static InterficieConsola interficie;
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		interficie=new InterficieConsola();
+		interficie.Ejecutar();
 	}
 
 }
