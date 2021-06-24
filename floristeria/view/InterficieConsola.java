@@ -2,6 +2,7 @@ package floristeria.view;
 
 import javax.swing.JOptionPane;
 
+import floristeria.controller.FloristeriaController;
 import floristeria.model.Material;
 import floristeria.model.Material.TipoMaterial;
 
@@ -9,9 +10,11 @@ public class InterficieConsola {
 	
 	private static Menu menu_principal;
 	private static Menu menu_materiales_decoracion;
+	private static FloristeriaController floristeria_control;
 	
 	public InterficieConsola() {
 		CreacionMenu();
+		floristeria_control=new FloristeriaController();
 	}
 	
 	public void Ejecutar() {
@@ -33,7 +36,7 @@ public class InterficieConsola {
 				AddDecoracion();
 				break;
 			case 4:
-				System.out.println("Mostrar stock.");
+				MostrarStock();
 				break;
 			}
 		} while (menu_principal_opcio!=5);
@@ -42,13 +45,31 @@ public class InterficieConsola {
 	
 	private void CrearFloristeria() {
 		String nombre_floristeria;
+		
+		if (floristeria_control.IsFloristeriaCreada()) {
+			System.err.println("La floristería ya ha sido creada");
+			return;
+		}
+		
 		nombre_floristeria=pedirDato("Crear floristería", "Introducir el nombre de la floristería");
 		if (nombre_floristeria==null) return;
-		System.out.println("Floristería con nombre " + nombre_floristeria + " creada.");
+		
+		try {
+			floristeria_control.crearFloristeria(nombre_floristeria);
+			System.out.println("Floristería con nombre " + nombre_floristeria + " creada.");
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
+		
 	}
 	
 	private void AddArbol() {
 		double precio, altura;
+		
+		if (!floristeria_control.IsFloristeriaCreada()) {
+			System.err.println("No es posible añadir un árbol porque la floristería NO ha sido creada todavía.");
+			return;
+		}
 		
 		precio=pedirDouble("Añadir árbol", "Introducir precio", -1000);
 		if (precio<0.0) return;
@@ -56,12 +77,22 @@ public class InterficieConsola {
 		altura=pedirDouble("Añadir árbol", "Introducir altura", -1000);
 		if (altura<0.0) return;
 		
-		System.out.println("Árbol con altura " + altura + " y precio " + precio +" añadido.");
+		try {
+			floristeria_control.AddArbolFloristeria(precio, altura);
+			System.out.println("Árbol con altura " + altura + " y precio " + precio +" añadido.");
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}	
 	}
 	
 	private void AddFlor() {
 		double precio;
 		String color;
+		
+		if (!floristeria_control.IsFloristeriaCreada()) {
+			System.err.println("No es posible añadir una flor porque la floristería NO ha sido creada todavía.");
+			return;
+		}
 		
 		precio=pedirDouble("Añadir flor", "Introducir precio", -1000);
 		if (precio<0.0) return;
@@ -69,7 +100,12 @@ public class InterficieConsola {
 		color=pedirDato("Añadir flor", "Introducir el color");
 		if (color==null) return;
 		
-		System.out.println("Flor de color " + color + " y precio " + precio +" añadida.");
+		try {
+			floristeria_control.AddFlorFloristeria(precio, color);
+			System.out.println("Flor de color " + color + " y precio " + precio +" añadida.");
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
 	}
 	
 	private void AddDecoracion() {
@@ -77,14 +113,33 @@ public class InterficieConsola {
 		int decoracion_opcion;
 		TipoMaterial material;
 		
+		if (!floristeria_control.IsFloristeriaCreada()) {
+			System.err.println("No es posible añadir una decoración porque la floristería NO ha sido creada todavía.");
+			return;
+		}
+		
 		precio=pedirDouble("Añadir decoración", "Introducir precio", -1000);
 		if (precio<0.0) return;
 		
 		decoracion_opcion=menu_materiales_decoracion.showMenu();
 		if (decoracion_opcion==2) return;
 		material=TipoMaterial.GetTipoMaterial(decoracion_opcion);
+		
+		try {
+			floristeria_control.AddDecoracionFloristeria(precio, material);
+			System.out.println("Decoración de " + material.toString() + " y precio " + precio +" añadida.");
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
+	}
 	
-		System.out.println("Decoración de " + material.toString() + " y precio " + precio +" añadida.");
+	public void MostrarStock() {
+		if (!floristeria_control.IsFloristeriaCreada()) {
+			System.err.println("No es posible mostrar el stock de la floristería porque NO ha sido creada todavía.");
+			return;
+		}
+		
+		System.out.println(floristeria_control.GetStockFloristeria());
 	}
 
 	private String pedirDato(String titol, String textSobreLaDadaAdemanar) {
