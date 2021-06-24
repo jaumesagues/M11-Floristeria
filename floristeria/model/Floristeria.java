@@ -3,6 +3,8 @@ package floristeria.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import floristeria.model.Material.TipoMaterial;
+
 public class Floristeria {
 
 	protected String nombreFloristeria;
@@ -65,8 +67,8 @@ public class Floristeria {
 		else System.err.println("La lista de arboles no está creada");
 	}
 	
-	public void addDecoracion(String nombreMaterial, double precioDecoracion) {
-		if(decoraciones!=null) decoraciones.add(new Decoracion(precioDecoracion, nombreMaterial));
+	public void addDecoracion(TipoMaterial material, double precioDecoracion) {
+		if(decoraciones!=null) decoraciones.add(new Decoracion(precioDecoracion, material));
 		else System.err.println("La lista de decoraciones no está creada");
 	}
 
@@ -84,8 +86,10 @@ public class Floristeria {
 
 	@Override
 	public String toString() {
-		return "Floristeria [nombreFloristeria=" + nombreFloristeria + ", flores=" + flores + ", arboles=" + arboles
-				+ ", decoracion=" + decoraciones + ", idFloristeria=" + idFloristeria + "]";
+		return "Stock floristeria id " + idFloristeria + " : " + nombreFloristeria + 
+				" :\n Cantidad de flores= " + flores.size() + 
+				"\n Cantidad de árboles= " + arboles.size()	+ 
+				"\n Cantidad de decoraciones= " + decoraciones.size()+"\n";
 	}
 	
 }
