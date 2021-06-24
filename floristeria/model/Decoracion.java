@@ -6,9 +6,9 @@ public class Decoracion extends ProductoFloristeria{
 
 	private TipoMaterial material;
 
-	public Decoracion(double precio, String nombreMaterial) {
+	public Decoracion(double precio, TipoMaterial material) {
 		super(precio);
-		establecerMaterial(nombreMaterial);
+		this.material=material;
 	}
 
 	public TipoMaterial getMaterial() {
