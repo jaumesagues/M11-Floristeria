@@ -4,11 +4,15 @@ import floristeria.model.Material.TipoMaterial;
 
 public class Decoracion extends ProductoFloristeria{
 
+	private int idDecoracion;
 	private TipoMaterial material;
+	private static int CONTADOR_DECORACIONES = 1;
 
 	public Decoracion(double precio, TipoMaterial material) {
 		super(precio);
 		this.material=material;
+		idDecoracion = CONTADOR_DECORACIONES;
+		CONTADOR_DECORACIONES++;
 	}
 
 	public TipoMaterial getMaterial() {
@@ -26,10 +30,18 @@ public class Decoracion extends ProductoFloristeria{
 		}
 		
 	}
+	
+	public int getIdDecoracion() {
+		return idDecoracion;
+	}
+	
+	public int getTotalDecoraciones() {
+		return CONTADOR_DECORACIONES;
+	}
 
 	@Override
 	public String toString() {
-		return "Decoracion [material=" + material + "]";
+		return "Decoracion [idDecoracion=" + idDecoracion + ", material=" + material + "]";
 	}
 	
 }

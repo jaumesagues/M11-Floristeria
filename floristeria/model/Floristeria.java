@@ -9,24 +9,22 @@ public class Floristeria {
 
 	protected String nombreFloristeria;
 	
-				//Los nombres de las variables podemos cambiarlos. "bbdd_flores", "listaFlores", etc
 	protected List<Flor> flores;
 	protected List<Arbol> arboles;
 	protected List<Decoracion> decoraciones;
 	
-				//variable static para llevar recuento de los objetos de tipo Floristeria. Vendrá bien en el Nivel 2
 	private static int CONTADOR_FLORISTERIAS = 1;
 	
-				//id de la floristeria que llevará el número del contador de objetos:
 	private int idFloristeria;
 	
 	
-				//Constructor vacio por si es necesario:
+	//CONSTRUCTORES:
 	public Floristeria() {
 		
 	}
 	
 	public Floristeria(String nombreFloristeria) {
+		
 		this.nombreFloristeria = nombreFloristeria;
 		
 		flores = new ArrayList<>();
@@ -36,9 +34,7 @@ public class Floristeria {
 		CONTADOR_FLORISTERIAS++;
 	}
 
-
-	//Getters y setters por defecto
-	
+	//GETTERS/SETTERS
 	public String getNombreFloristeria() {
 		return nombreFloristeria;
 	}
@@ -51,25 +47,8 @@ public class Floristeria {
 		return flores;
 	}
 
-	public void addFlor(String colorFlor, double precioFlor) {
-		
-		if(flores!=null)	flores.add(new Flor(precioFlor, colorFlor));
-		else System.err.println("La lista de flores no está creada");
-		
-	}
-
 	public List<Arbol> getArboles() {
 		return arboles;
-	}
-
-	public void addArbol(double alturaArbol, double precioArbol) {
-		if(arboles!=null)	arboles.add(new Arbol(precioArbol, alturaArbol));
-		else System.err.println("La lista de arboles no está creada");
-	}
-	
-	public void addDecoracion(TipoMaterial material, double precioDecoracion) {
-		if(decoraciones!=null) decoraciones.add(new Decoracion(precioDecoracion, material));
-		else System.err.println("La lista de decoraciones no está creada");
 	}
 
 	public List<Decoracion> getDecoraciones() {
@@ -80,16 +59,100 @@ public class Floristeria {
 		return idFloristeria;
 	}
 
-	public int getStock() {
-		return CONTADOR_FLORISTERIAS;
+	//OTROS METODOS
+	
+	public void addArbol(double alturaArbol, double precioArbol) {
+		if(arboles!=null)	arboles.add(new Arbol(precioArbol, alturaArbol));
+		else System.err.println("La lista de arboles no está creada");
+	}
+	
+	public void addDecoracion(TipoMaterial material, double precioDecoracion) {
+		if(decoraciones!=null) decoraciones.add(new Decoracion(precioDecoracion, material));
+		else System.err.println("La lista de decoraciones no está creada");
 	}
 
-	@Override
-	public String toString() {
-		return "Stock floristeria id " + idFloristeria + " : " + nombreFloristeria + 
-				" :\n Cantidad de flores= " + flores.size() + 
-				"\n Cantidad de árboles= " + arboles.size()	+ 
-				"\n Cantidad de decoraciones= " + decoraciones.size()+"\n";
+	public void addFlor(String colorFlor, double precioFlor) {
+		
+		if(flores!=null)	flores.add(new Flor(precioFlor, colorFlor));
+		else System.err.println("La lista de flores no está creada");
+		
+	}
+	
+	public void deleteFlorById(int id) {
+
+		if (!getFlores().isEmpty()) {
+			for (Flor flor : getFlores()) {
+				if (flor.getIdFlor() == id) {
+					getFlores().remove(flor);
+					System.out.println("Eliminado arbol: " + flor.toString());
+					break;
+				}
+			}
+		} else {
+			System.err.println("La lista de flores se encuentra vacía");
+		}
+	}
+	
+	public void deleteArbolById(int id) {
+
+		if (!getArboles().isEmpty()) {
+			for (Arbol arbol : getArboles()) {
+				if (arbol.getIdArbol() == id) {
+					getArboles().remove(arbol);
+					System.out.println("Eliminado arbol: " + arbol.toString());
+					break;
+				}	
+			}
+		} else {
+			System.err.println("La lista de árboles se encuentra vacía");
+		}
+	}
+
+	public void deleteDecoracionById(int id) {
+
+		if (!getDecoraciones().isEmpty()) {
+			for (Decoracion decoracion : getDecoraciones()) {
+				if (decoracion.getIdDecoracion() == id) {
+					getDecoraciones().remove(decoracion);
+					System.out.println("Eliminada decoracion: " + decoracion.toString());
+					break;
+				}
+			}
+		} else {
+			System.err.println("La lista de árboles se encuentra vacía");
+		}
+	}
+
+	public int getTotalFloristerias() {
+		return CONTADOR_FLORISTERIAS;
+	}
+	
+	public double valorProductos() {
+		
+		double valorTotal = 0;
+		
+		for(Flor flor: flores) {
+			valorTotal+=flor.getPrecio();
+		}
+		for(Arbol arbol: arboles) {
+			valorTotal+=arbol.getPrecio();
+		}
+		for(Decoracion decoracion: decoraciones) {
+			valorTotal+=decoracion.getPrecio();
+		}
+		
+		return valorTotal;
+	}
+	
+	public String getMensajeValorTotal() {
+		return "Valor de la floristeria con id: " + idFloristeria + "\n" + nombreFloristeria + "Precio total -> " + valorProductos() + " €";
+	}
+
+	public String getMensajeStock() {
+		return "Stock de la floristeria con id: " + idFloristeria + " \n " + nombreFloristeria + 
+				" :\n Cantidad de flores= " + flores.size() + " unidades" +
+				"\n Cantidad de árboles= " + arboles.size()	+ " unidades" +
+				"\n Cantidad de decoraciones= " + decoraciones.size()+" unidades\n";
 	}
 	
 }

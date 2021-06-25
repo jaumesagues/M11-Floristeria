@@ -19,7 +19,11 @@ public abstract class ProductoFloristeria {
 	public void setPrecio(double precio) {
 		this.precio = precio;
 	}
-
+	
+	public int getTotalProducts()
+	{
+		return CONTADOR_PRODUCTOS_FLORISTERIA;
+	}
 	@Override
 	public String toString() {
 		return "ProductoFloristeria [precio=" + precio + "]";
