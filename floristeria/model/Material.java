@@ -4,7 +4,6 @@ public class Material {
 
 	public enum TipoMaterial {
 
-		//aquí también podríamos utilizar valores (1 - 2) en lugar de Strings
 		MADERA("madera",0), PLASTICO("plastico",1);
 
 		TipoMaterial(String string, int i) {

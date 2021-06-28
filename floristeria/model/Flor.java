@@ -31,7 +31,7 @@ public class Flor extends ProductoFloristeria{
 
 	@Override
 	public String toString() {
-		return "Flor [idFlor=" + idFlor + ", color=" + color + "]";
+		return "Flor [idFlor=" + idFlor + ", color=" + color + ", precio= "+ super.precio+ " ]";
 	}
 
 }

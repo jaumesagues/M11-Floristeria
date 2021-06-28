@@ -145,7 +145,7 @@ public class Floristeria {
 	}
 	
 	public String getMensajeValorTotal() {
-		return "Valor de la floristeria con id: " + idFloristeria + "\n" + nombreFloristeria + "Precio total -> " + valorProductos() + " €";
+		return "Valor de la floristeria con id: " + idFloristeria + "\n" + nombreFloristeria + " Precio total -> " + valorProductos() + " €";
 	}
 
 	public String getMensajeStock() {

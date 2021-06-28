@@ -1,15 +1,16 @@
 package floristeria.view;
 
 import javax.swing.JOptionPane;
-
 import floristeria.controller.FloristeriaController;
-import floristeria.model.Material;
 import floristeria.model.Material.TipoMaterial;
+import floristeria.model.ProductoEnum.TipoProducto;
 
 public class InterficieConsola {
 	
 	private static Menu menu_principal;
+	private static Menu menu_productos;
 	private static Menu menu_materiales_decoracion;
+	private static Menu menu_operaciones_productos;
 	private static FloristeriaController floristeria_control;
 	
 	public InterficieConsola() {
@@ -27,16 +28,16 @@ public class InterficieConsola {
 				CrearFloristeria();
 				break;
 			case 1:
-				AddArbol();
+				AddProducto();
 				break;
 			case 2:
-				AddFlor();		
+				ListarProductos();
 				break;
 			case 3:
-				AddDecoracion();
+				MostrarStock();
 				break;
 			case 4:
-				MostrarStock();
+				MostrarValorTotal();
 				break;
 			}
 		} while (menu_principal_opcio!=5);
@@ -61,6 +62,56 @@ public class InterficieConsola {
 			System.err.println(e.getMessage());
 		}
 		
+	}
+	
+	private void AddProducto() {
+		int menu_producto_opcio;
+		
+		if (!floristeria_control.IsFloristeriaCreada()) {
+			System.err.println("No es posible agregar ningún producto porque la floristería NO ha sido creada.");
+			return;
+		}
+		
+		do {
+			menu_producto_opcio=menu_productos.showMenu();
+			switch (menu_producto_opcio) {
+			case 0:
+				AddArbol();
+				break;
+			case 1:
+				AddFlor();
+				break;
+			case 2:
+				AddDecoracion();
+				break;
+			}
+		} while (menu_producto_opcio!=3);
+	}
+	
+	private void ListarProductos() {
+		int menu_producto_opcio;
+		
+		if (!floristeria_control.IsFloristeriaCreada()) {
+			System.err.println("No es posible mostrar los productos porque la floristería NO ha sido creada.");
+			return;
+		}
+		
+		do {
+			menu_producto_opcio=menu_productos.showMenu();
+			switch (menu_producto_opcio) {
+			case 0:
+				System.out.println(floristeria_control.ListarArboles());
+				break;
+			case 1:
+				System.out.println(floristeria_control.ListarFlores());
+				break;
+			case 2:
+				System.out.println(floristeria_control.ListarDecoraciones());
+				break;
+			}
+			
+			Operacion(TipoProducto.GetTipoProducto(menu_producto_opcio));
+		} while (menu_producto_opcio!=3);
 	}
 	
 	private void AddArbol() {
@@ -133,13 +184,80 @@ public class InterficieConsola {
 		}
 	}
 	
-	public void MostrarStock() {
+	private void Operacion(TipoProducto prod) {
+		int menu_operacion_opcion;
+		
+		do {
+			menu_operacion_opcion=menu_operaciones_productos.showMenu();
+			
+			switch (menu_operacion_opcion) {
+			case 0:
+				Retirar(prod);
+				break;
+			}
+		
+		} while(menu_operacion_opcion!=1);
+	}
+	
+	private void Retirar(TipoProducto prod) {
+		int id_producto;
+		String titulo="";
+		String mensaje="";
+		
+		switch (prod) {
+		case ARBOL:
+			titulo="Retirar árbol";
+			mensaje="Indique un id de un árbol de la lista para ser eliminado.";
+			break;
+		case FLOR:
+			titulo="Retirar flor";
+			mensaje="Indique un id de una flor de la lista para ser eliminada.";
+			break;
+		case DECORACION:
+			titulo="Retirar decoración";
+			mensaje="Indique un id de una decoración de la lista para ser eliminada.";
+			break;
+		}
+		
+		id_producto=pedirInteger(titulo, mensaje,-1);
+		if (id_producto==-1) return;
+		
+		try {
+			switch (prod) {
+			case ARBOL:
+				floristeria_control.RetirarArbol(id_producto);
+				System.out.println("Árbol con id " + id_producto + " ha sido retirado.");
+				break;
+			case FLOR:
+				floristeria_control.RetirarFlor(id_producto);
+				System.out.println("Flor con id " + id_producto + " ha sido retirada.");
+				break;
+			case DECORACION:
+				floristeria_control.RetirarDecoracion(id_producto);
+				System.out.println("Decoracion con id " + id_producto + " ha sido retirada.");
+				break;
+			}
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+		}
+	}
+	
+	private void MostrarStock() {
 		if (!floristeria_control.IsFloristeriaCreada()) {
 			System.err.println("No es posible mostrar el stock de la floristería porque NO ha sido creada todavía.");
 			return;
 		}
 		
 		System.out.println(floristeria_control.GetStockFloristeria());
+	}
+	
+	private void MostrarValorTotal() {
+		if (!floristeria_control.IsFloristeriaCreada()) {
+			System.err.println("No es posible mostrar el stock de la floristería porque NO ha sido creada todavía.");
+			return;
+		}
+		
+		System.out.println(floristeria_control.GetValorTotalFloristeria());
 	}
 
 	private String pedirDato(String titol, String textSobreLaDadaAdemanar) {
@@ -161,8 +279,31 @@ public class InterficieConsola {
 					answer = Double.parseDouble(answer_str);
 					answer_ok = true;
 				} catch (Exception e) {
-					System.out.println("El valor introduït no és correcte."
-							+ "Haurà d'introduir una altre valor o prèmer 'Cancelar'");
+					System.out.println("El valor introducido es incorrecto."
+							+ "Deberá introducir otro valor o hacer click en 'Cancelar'");
+				}
+			}
+		}
+		
+		return answer;
+	}
+	
+	public static int pedirInteger(String titulo, String message, int nullnumber) {
+		String answer_str;
+		boolean answer_ok=false;
+		int answer= nullnumber;
+		
+		while (!answer_ok) {
+			answer_str=JOptionPane.showInputDialog(null, message, titulo, JOptionPane.QUESTION_MESSAGE);
+			if (answer_str==null) {
+				return nullnumber;
+			} else {
+				try {
+					answer=Integer.parseInt(answer_str);
+					answer_ok=true;
+				} catch (Exception e) {
+					System.out.println("El valor introducido es incorrecto."
+							+ "Deberá introducir otro valor o hacer click en 'Cancelar'");
 				}
 			}
 		}
@@ -174,16 +315,27 @@ public class InterficieConsola {
 		menu_principal=new Menu("Escoja una de las siguientes opciones.", 6);
 		
 		menu_principal.addOptionMenu("Crear floristería");
-		menu_principal.addOptionMenu("Añadir árbol");
-		menu_principal.addOptionMenu("Añadir flor");
-		menu_principal.addOptionMenu("Añadir decoración");
-		menu_principal.addOptionMenu("Mostrar Stock");
+		menu_principal.addOptionMenu("Agregar producto");
+		menu_principal.addOptionMenu("Listar productos");
+		menu_principal.addOptionMenu("Mostrar stock");
+		menu_principal.addOptionMenu("Mostrar valor total floristeria");
 		menu_principal.addOptionMenu("Salir");
+		
+		menu_productos= new Menu("Escoja uno de los siguientes productos.", 4);
+		
+		menu_productos.addOptionMenu("Árbol");
+		menu_productos.addOptionMenu("Flor");
+		menu_productos.addOptionMenu("Decoración");
+		menu_productos.addOptionMenu("Retroceder");
 		
 		menu_materiales_decoracion=new Menu("Escoja un material para la decoración.", 3);
 		
 		menu_materiales_decoracion.addOptionMenu("Madera");
 		menu_materiales_decoracion.addOptionMenu("Plástico");
-		menu_materiales_decoracion.addOptionMenu("Salir");
+		menu_materiales_decoracion.addOptionMenu("Retroceder");
+		
+		menu_operaciones_productos=new Menu("Escoja una de las siguientes operaciones.", 2);
+		menu_operaciones_productos.addOptionMenu("Retirar");
+		menu_operaciones_productos.addOptionMenu("Retroceder");
 	}
 }

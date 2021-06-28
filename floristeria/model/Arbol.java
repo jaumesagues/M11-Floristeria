@@ -32,7 +32,7 @@ public class Arbol extends ProductoFloristeria{
 
 	@Override
 	public String toString() {
-		return "Arbol [idArbol=" + idArbol + ", altura=" + altura + "]";
+		return "Arbol [idArbol=" + idArbol + ", altura=" + altura + ", precio= "+ super.precio+ " ]";
 	}
 	
 

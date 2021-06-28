@@ -1,7 +1,7 @@
 package floristeria.controller;
 
-import floristeria.model.Floristeria;
-import floristeria.model.Material;
+import java.util.List;
+import floristeria.model.*;
 import floristeria.model.Material.TipoMaterial;
 
 public class FloristeriaController {
@@ -25,22 +25,104 @@ public class FloristeriaController {
 	public void AddArbolFloristeria(double precio, double altura) throws Exception {
 		if (floristeria!=null) {
 			floristeria.addArbol(altura, precio);
-		} else  throw new Exception("No es posible añadir un árbol porque la floristería no ha sido creada");
+		} else  throw new Exception("No es posible añadir un árbol porque la floristería NO ha sido creada");
 	}
 	
 	public void AddFlorFloristeria(double precio, String color) throws Exception {
 		if (floristeria!=null) {
 			floristeria.addFlor(color, precio);
-		} else  throw new Exception("No es posible añadir una flor porque la floristería no ha sido creada");
+		} else  throw new Exception("No es posible añadir una flor porque la floristería NO ha sido creada");
 	}
 	
 	public void AddDecoracionFloristeria(double precio, TipoMaterial material) throws Exception {
 		if (floristeria!=null) {
 			floristeria.addDecoracion(material, precio);;
-		} else  throw new Exception("No es posible añadir una decoración porque la floristería no ha sido creada");
+		} else  throw new Exception("No es posible añadir una decoración porque la floristería NO ha sido creada");
+	}
+	
+	public String ListarArboles() {
+		String list_arboles_str="Listado de árboles:\n";
+		List<Arbol> list_arboles=floristeria.getArboles();
+		
+		for (Arbol arbol:list_arboles) {
+			list_arboles_str+=arbol.toString()+"\n";
+		}
+		
+		return list_arboles_str;
+	}
+	
+	public String ListarFlores() {
+		String list_flores_str="Listado de flores:\n";
+		List<Flor> list_flores=floristeria.getFlores();
+		
+		for (Flor flor:list_flores) {
+			list_flores_str+=flor.toString()+"\n";
+		}
+		
+		return list_flores_str;
+	}
+	
+	public String ListarDecoraciones() {
+		String list_decoraciones_str="Listado de decoraciones:\n";
+		List<Decoracion> list_decoraciones=floristeria.getDecoraciones();
+		
+		for (Decoracion decoracion:list_decoraciones) {
+			list_decoraciones_str+=decoracion.toString()+"\n";
+		}
+		
+		return list_decoraciones_str;
+	}
+	
+	public void RetirarArbol(int id) throws Exception {
+		boolean encontrado=false;
+		List<Arbol> list_arboles=floristeria.getArboles();
+		
+		for (Arbol arbol:list_arboles) {
+			if (arbol.getIdArbol()==id) {
+				list_arboles.remove(arbol);
+				encontrado=true;
+				break;
+			}
+		}
+		
+		if (!encontrado) throw new Exception("No es posible retirar el árbol seleccionado porque no existe.");
+	}
+	
+	public void RetirarFlor(int id) throws Exception {
+		boolean encontrado=false;
+		List<Flor> list_flores=floristeria.getFlores();
+		
+		for (Flor flor:list_flores) {
+			if (flor.getIdFlor()==id) {
+				list_flores.remove(flor);
+				encontrado=true;
+				break;
+			}
+		}
+		
+		if (!encontrado) throw new Exception("No es posible retirar la flor seleccionada porque no existe.");
+	}
+	
+	public void RetirarDecoracion(int id) throws Exception {
+		boolean encontrado=false;
+		List<Decoracion> list_decoraciones=floristeria.getDecoraciones();
+		
+		for (Decoracion decoracion:list_decoraciones) {
+			if (decoracion.getIdDecoracion()==id) {
+				list_decoraciones.remove(decoracion);
+				encontrado=true;
+				break;
+			}
+		}
+		
+		if (!encontrado) throw new Exception("No es posible retirar la decoracion seleccionada porque no existe.");
 	}
 	
 	public String GetStockFloristeria() {
-		return floristeria.toString();
+		return floristeria.getMensajeStock();
+	}
+	
+	public String GetValorTotalFloristeria() {
+		return floristeria.getMensajeValorTotal();
 	}
 }

@@ -41,7 +41,7 @@ public class Decoracion extends ProductoFloristeria{
 
 	@Override
 	public String toString() {
-		return "Decoracion [idDecoracion=" + idDecoracion + ", material=" + material + "]";
+		return "Decoracion [idDecoracion=" + idDecoracion + ", material=" + material + ", precio= "+ super.precio+ " ]";
 	}
 	
 }
