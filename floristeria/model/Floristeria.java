@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import floristeria.model.Material.TipoMaterial;
+import floristeria.model.ProductoEnum.TipoProducto;
 
 public class Floristeria {
 
@@ -12,17 +13,12 @@ public class Floristeria {
 	protected List<Flor> flores;
 	protected List<Arbol> arboles;
 	protected List<Decoracion> decoraciones;
+	protected List<Ticket> tickets;
 	
 	private static int CONTADOR_FLORISTERIAS = 1;
 	
 	private int idFloristeria;
-	
-	
-	//CONSTRUCTORES:
-	public Floristeria() {
-		
-	}
-	
+
 	public Floristeria(String nombreFloristeria) {
 		
 		this.nombreFloristeria = nombreFloristeria;
@@ -30,6 +26,7 @@ public class Floristeria {
 		flores = new ArrayList<>();
 		arboles = new ArrayList<>();
 		decoraciones = new ArrayList<>();
+		tickets = new ArrayList<>();
 		idFloristeria = CONTADOR_FLORISTERIAS;
 		CONTADOR_FLORISTERIAS++;
 	}
@@ -77,50 +74,63 @@ public class Floristeria {
 		else System.err.println("La lista de flores no está creada");
 		
 	}
+
+	
+	//METODO PARA EL NIVEL 3: Recibirá 3 parámetros
+	//		Primer paramtro: idTicket -> para el ticket de la compra en cuestion
+	//		Segundo: numTipoProducto -> 0 (arbol), 1(flor), 2(decoracion)
+	//		Tercero: idProducto -> el id del producto
+	
+	public void sellProduct(int idTicket, int numTipoProducto, int idProducto) {
+		
+		TipoProducto tipoProducto = TipoProducto.GetTipoProducto(numTipoProducto); 	//guardo en int tipo de producto 
+		Ticket ticket = getTicketById(idTicket);								//ticket de la compra actual
+		
+		if(tipoProducto == TipoProducto.ARBOL) {		//IF-ELSEIF para cada uno de los 3 productos
+			deleteArbolById(idProducto);										//elimino del "stock"
+			ticket.addProductToList(getArbolById(idProducto));					//lo añado al ticket actual
+			System.out.println("Añadido producto al ticket");
+			
+		}else if(tipoProducto==TipoProducto.FLOR) {
+			deleteFlorById(idProducto);
+			ticket.addProductToList(getFlorById(idProducto));
+			System.out.println("Añadido producto al ticket");
+			
+		}else if(tipoProducto==TipoProducto.DECORACION) {
+			deleteDecoracionById(idProducto);
+			ticket.addProductToList(getDecoracionById(idProducto));
+			System.out.println("Añadido producto al ticket");
+			
+		}else System.err.println("El producto no corresponde con ninguno de los productos de la Floristeria");
+		
+	}
 	
 	public void deleteFlorById(int id) {
 
 		if (!getFlores().isEmpty()) {
-			for (Flor flor : getFlores()) {
-				if (flor.getIdFlor() == id) {
-					getFlores().remove(flor);
-					System.out.println("Eliminado arbol: " + flor.toString());
-					break;
-				}
-			}
-		} else {
-			System.err.println("La lista de flores se encuentra vacía");
-		}
+		flores.remove(getFlorById(id));
+		System.out.println("Eliminada flor");
+
+		} else System.err.println("La lista de flores se encuentra vacía");
 	}
 	
 	public void deleteArbolById(int id) {
 
-		if (!getArboles().isEmpty()) {
-			for (Arbol arbol : getArboles()) {
-				if (arbol.getIdArbol() == id) {
-					getArboles().remove(arbol);
-					System.out.println("Eliminado arbol: " + arbol.toString());
-					break;
-				}	
-			}
-		} else {
-			System.err.println("La lista de árboles se encuentra vacía");
-		}
+		if (!arboles.isEmpty()) {
+			arboles.remove(getArbolById(id));
+			System.out.println("Eliminado arbol");
+
+		} else System.err.println("La lista de árboles se encuentra vacía");
+
 	}
 
 	public void deleteDecoracionById(int id) {
 
 		if (!getDecoraciones().isEmpty()) {
-			for (Decoracion decoracion : getDecoraciones()) {
-				if (decoracion.getIdDecoracion() == id) {
-					getDecoraciones().remove(decoracion);
-					System.out.println("Eliminada decoracion: " + decoracion.toString());
-					break;
-				}
-			}
-		} else {
-			System.err.println("La lista de árboles se encuentra vacía");
-		}
+			decoraciones.remove(getDecoracionById(id));
+			System.out.println("Eliminada decoracion");
+			
+		} else System.err.println("La lista de árboles se encuentra vacía");
 	}
 
 	public int getTotalFloristerias() {
@@ -144,8 +154,78 @@ public class Floristeria {
 		return valorTotal;
 	}
 	
+	public Arbol getArbolById(int idArbol) {
+		Arbol arbolEncontrado = null;
+		
+		for(Arbol arbol: arboles) {
+			if (arbol.getIdArbol() == idArbol) {
+				
+				arbolEncontrado = arbol;
+				System.out.println("Arbol encontrado con ID: " + arbolEncontrado.getIdArbol());
+				break;
+			}	
+		}
+		return arbolEncontrado;
+	}
+	
+	public Flor getFlorById(int idFlor) {
+		Flor florEncontrada = null;
+		
+		for(Flor flor: flores) {
+			if(flor.getIdFlor() == idFlor) {
+				florEncontrada = flor;
+				System.out.println("Flor encontrada con ID: " + florEncontrada.getIdFlor());
+				break;
+			}
+		}
+		return florEncontrada;
+	}
+	
+	public Decoracion getDecoracionById(int idDecoracion) {
+		Decoracion decoracionEncontrada = null;
+		
+		for(Decoracion decoracion: decoraciones) {
+			if(decoracion.getIdDecoracion() == idDecoracion) {
+				decoracionEncontrada = decoracion;
+				System.out.println("Decoracion encontrada con ID: " + decoracionEncontrada.getIdDecoracion());
+				break;
+			}
+		}
+		return decoracionEncontrada;
+	}
+	
+	public Ticket getTicketById(int idTicket) {
+		Ticket ticketEncontrado = null;
+		
+		for(Ticket ticket: tickets) {
+			if(ticket.getIdTicket() == idTicket) {
+				ticketEncontrado = ticket;
+				break;
+			}
+		}
+		return ticketEncontrado;
+	}
+	
+	public void createTicket() {
+		Ticket ticket = new Ticket();
+		if(tickets==null) tickets = new ArrayList<>();
+		tickets.add(ticket);
+		System.out.println("Ticket creado con nº de ID: " + ticket.getIdTicket());
+	}
+	
+	public String getMensageComprasAntiguas() {
+		
+		StringBuilder sb = new StringBuilder();
+		
+		for(Ticket ticket: tickets) {
+			sb.append(ticket.toString());
+		}
+		
+		return sb.toString();
+	}
+	
 	public String getMensajeValorTotal() {
-		return "Valor de la floristeria con id: " + idFloristeria + "\n" + nombreFloristeria + " Precio total -> " + valorProductos() + " €";
+		return "Valor de la floristeria '" + nombreFloristeria +"' con id: " + idFloristeria + "\n" + nombreFloristeria + " Precio total -> " + valorProductos() + " €";
 	}
 
 	public String getMensajeStock() {
