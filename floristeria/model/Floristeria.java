@@ -81,22 +81,20 @@ public class Floristeria {
 	//		Segundo: numTipoProducto -> 0 (arbol), 1(flor), 2(decoracion)
 	//		Tercero: idProducto -> el id del producto
 	
-	public void sellProduct(int idTicket, int numTipoProducto, int idProducto) {
-		
-		TipoProducto tipoProducto = TipoProducto.GetTipoProducto(numTipoProducto); 	//guardo en int tipo de producto 
+	public void sellProduct(int idTicket, TipoProducto tipo_producto, int idProducto) {
 		Ticket ticket = getTicketById(idTicket);								//ticket de la compra actual
 		
-		if(tipoProducto == TipoProducto.ARBOL) {		//IF-ELSEIF para cada uno de los 3 productos
+		if(tipo_producto == TipoProducto.ARBOL) {		//IF-ELSEIF para cada uno de los 3 productos
 			deleteArbolById(idProducto);										//elimino del "stock"
 			ticket.addProductToList(getArbolById(idProducto));					//lo añado al ticket actual
 			System.out.println("Añadido producto al ticket");
 			
-		}else if(tipoProducto==TipoProducto.FLOR) {
+		}else if(tipo_producto==TipoProducto.FLOR) {
 			deleteFlorById(idProducto);
 			ticket.addProductToList(getFlorById(idProducto));
 			System.out.println("Añadido producto al ticket");
 			
-		}else if(tipoProducto==TipoProducto.DECORACION) {
+		}else if(tipo_producto==TipoProducto.DECORACION) {
 			deleteDecoracionById(idProducto);
 			ticket.addProductToList(getDecoracionById(idProducto));
 			System.out.println("Añadido producto al ticket");

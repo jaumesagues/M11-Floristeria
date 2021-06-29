@@ -3,6 +3,7 @@ package floristeria.controller;
 import java.util.List;
 import floristeria.model.*;
 import floristeria.model.Material.TipoMaterial;
+import floristeria.model.ProductoEnum.TipoProducto;
 
 public class FloristeriaController {
 	
@@ -116,6 +117,21 @@ public class FloristeriaController {
 		}
 		
 		if (!encontrado) throw new Exception("No es posible retirar la decoracion seleccionada porque no existe.");
+	}
+	
+	public int IniciarVentaProductos() {
+		int id_ticket=1;
+		
+		//id_ticket=floristeria.createTicket();
+		return id_ticket;
+	}
+	
+	public void VenderProducto(int id_ticket, TipoProducto tipo_producto, int id_producto) {
+		floristeria.sellProduct(id_ticket, tipo_producto, id_producto);
+	}
+	
+	public double CalcTotalTicket(int id_ticket) {
+		return 0.0;
 	}
 	
 	public String GetStockFloristeria() {

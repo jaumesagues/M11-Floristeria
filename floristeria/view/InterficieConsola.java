@@ -34,15 +34,23 @@ public class InterficieConsola {
 				ListarProductos();
 				break;
 			case 3:
-				MostrarStock();
+				VenderProductos();
 				break;
 			case 4:
+				MostrarStock();
+				break;
+			case 5:
+				//MostrarVentas();
+				break;
+			case 6:
 				MostrarValorTotal();
 				break;
 			}
-		} while (menu_principal_opcio!=5);
+		} while (menu_principal_opcio!=7);
 		System.out.println("El programa ha finalizado.");
 	}
+	
+	// Creación floristería
 	
 	private void CrearFloristeria() {
 		String nombre_floristeria;
@@ -60,9 +68,10 @@ public class InterficieConsola {
 			System.out.println("Floristería con nombre " + nombre_floristeria + " creada.");
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
-		}
-		
+		}	
 	}
+	
+	// Añadir productos
 	
 	private void AddProducto() {
 		int menu_producto_opcio;
@@ -86,35 +95,6 @@ public class InterficieConsola {
 				break;
 			}
 		} while (menu_producto_opcio!=3);
-	}
-	
-	private void ListarProductos() {
-		int menu_producto_opcio;
-		
-		if (!floristeria_control.IsFloristeriaCreada()) {
-			System.err.println("No es posible mostrar los productos porque la floristería NO ha sido creada.");
-			return;
-		}
-		
-		do {
-			menu_producto_opcio=menu_productos.showMenu();
-			switch (menu_producto_opcio) {
-			case 0:
-				System.out.println(floristeria_control.ListarArboles());
-				break;
-			case 1:
-				System.out.println(floristeria_control.ListarFlores());
-				break;
-			case 2:
-				System.out.println(floristeria_control.ListarDecoraciones());
-				break;
-			}
-			if (menu_producto_opcio!=3) {
-				Operacion(TipoProducto.GetTipoProducto(menu_producto_opcio));
-			}
-		} while (menu_producto_opcio!=3);
-		
-		
 	}
 	
 	private void AddArbol() {
@@ -187,6 +167,35 @@ public class InterficieConsola {
 		}
 	}
 	
+	// Listar y retirar productos
+	
+	private void ListarProductos() {
+		int menu_producto_opcio;
+		
+		if (!floristeria_control.IsFloristeriaCreada()) {
+			System.err.println("No es posible mostrar los productos porque la floristería NO ha sido creada.");
+			return;
+		}
+		
+		do {
+			menu_producto_opcio=menu_productos.showMenu();
+			switch (menu_producto_opcio) {
+			case 0:
+				System.out.println(floristeria_control.ListarArboles());
+				break;
+			case 1:
+				System.out.println(floristeria_control.ListarFlores());
+				break;
+			case 2:
+				System.out.println(floristeria_control.ListarDecoraciones());
+				break;
+			}
+			if (menu_producto_opcio!=3) {
+				Operacion(TipoProducto.GetTipoProducto(menu_producto_opcio));
+			}
+		} while (menu_producto_opcio!=3);	
+	}
+	
 	private void Operacion(TipoProducto prod) {
 		int menu_operacion_opcion;
 		
@@ -243,6 +252,79 @@ public class InterficieConsola {
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
+	}
+	
+	// Vender productos
+	
+	private void VenderProductos() {
+		int id_producto;
+		int id_ticket;
+		TipoProducto tipo_producto;
+		int menu_producto_opcio;
+		String titulo="";
+		String mensaje="";
+		boolean terminar_venta=false;
+		double totalticket;
+		
+		if (!floristeria_control.IsFloristeriaCreada()) {
+			System.err.println("No es posible mostrar los productos porque la floristería NO ha sido creada.");
+			return;
+		}
+		
+		// Crear ticket
+		id_ticket=floristeria_control.IniciarVentaProductos();
+		//Añadir productos
+		
+		do {
+			menu_producto_opcio=menu_productos.showMenu();
+			if (menu_producto_opcio==3) {
+				terminar_venta=true;
+			} else {
+				tipo_producto=TipoProducto.GetTipoProducto(menu_producto_opcio);
+				switch (tipo_producto) {
+				case ARBOL:
+					System.out.println(floristeria_control.ListarArboles());
+					titulo="Vender árbol";
+					mensaje="Indique un id de un árbol de la lista para venderlo.\n Hacer click en 'Cancelar' para terminar la venta.";
+					break;
+				case FLOR:
+					System.out.println(floristeria_control.ListarFlores());
+					titulo="Vender flor";
+					mensaje="Indique un id de una flor de la lista para venderla.\n Hacer click en 'Cancelar' para terminar la venta.";
+					break;
+				case DECORACION:
+					System.out.println(floristeria_control.ListarDecoraciones());
+					titulo="Vender decoración";
+					mensaje="Indique un id de una decoración de la lista para venderla.\n Hacer click en 'Cancelar' para terminar la venta.";
+					break;
+				}
+				id_producto=pedirInteger(titulo, mensaje,-1);
+				if (id_producto==-1) {
+					terminar_venta=true;
+				} else {
+					try {
+						floristeria_control.VenderProducto(id_ticket, tipo_producto, id_producto);
+						switch (tipo_producto) {
+						case ARBOL:
+							System.out.println("Árbol con id " + id_producto + " ha sido vendida.");
+							break;
+						case FLOR:
+							System.out.println("Flor con id " + id_producto + " ha sido vendida.");
+							break;
+						case DECORACION:
+							System.out.println("Decoracion con id " + id_producto + " ha sido vendida.");
+							break;
+						}
+					} catch (Exception e) {
+						System.err.println(e.getMessage());
+					}
+				}
+			}
+		} while (!terminar_venta);
+	
+		// Mostrar total ticket
+		totalticket=floristeria_control.CalcTotalTicket(id_ticket);
+		System.out.println("La venta id= " + id_ticket + " asciende a un total de "+totalticket + " euros.");
 	}
 	
 	private void MostrarStock() {
@@ -315,12 +397,14 @@ public class InterficieConsola {
 	}
 	
 	private void CreacionMenu() {
-		menu_principal=new Menu("Escoja una de las siguientes opciones.", 6);
+		menu_principal=new Menu("Escoja una de las siguientes opciones.", 8);
 		
 		menu_principal.addOptionMenu("Crear floristería");
 		menu_principal.addOptionMenu("Agregar producto");
 		menu_principal.addOptionMenu("Listar productos");
+		menu_principal.addOptionMenu("Realizar venta");
 		menu_principal.addOptionMenu("Mostrar stock");
+		menu_principal.addOptionMenu("Mostrar ventas realizadas");
 		menu_principal.addOptionMenu("Mostrar valor total floristeria");
 		menu_principal.addOptionMenu("Salir");
 		
