@@ -109,9 +109,12 @@ public class InterficieConsola {
 				System.out.println(floristeria_control.ListarDecoraciones());
 				break;
 			}
-			
-			Operacion(TipoProducto.GetTipoProducto(menu_producto_opcio));
+			if (menu_producto_opcio!=3) {
+				Operacion(TipoProducto.GetTipoProducto(menu_producto_opcio));
+			}
 		} while (menu_producto_opcio!=3);
+		
+		
 	}
 	
 	private void AddArbol() {
