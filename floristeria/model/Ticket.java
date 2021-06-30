@@ -35,6 +35,11 @@ public class Ticket {
 		listaProductos.add(producto);
 	}
 	
+	public double getValorTicket() {
+		
+		return listaProductos.stream().mapToDouble(producto->producto.getPrecio()).sum();
+	}
+	
 	public String toString() {
 		return "Ticket nº: " + idTicket + ", contiene " + listaProductos.size() + " producto(s) : \n";
 	}
