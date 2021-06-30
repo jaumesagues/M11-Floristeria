@@ -204,11 +204,11 @@ public class Floristeria {
 		return ticketEncontrado;
 	}
 	
-	public void createTicket() {
+	public int createTicket() {
 		Ticket ticket = new Ticket();
 		if(tickets==null) tickets = new ArrayList<>();
 		tickets.add(ticket);
-		System.out.println("Ticket creado con nº de ID: " + ticket.getIdTicket());
+		return ticket.getIdTicket();
 	}
 	
 	public String getMensageComprasAntiguas() {

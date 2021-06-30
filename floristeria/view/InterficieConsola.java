@@ -324,7 +324,7 @@ public class InterficieConsola {
 	
 		// Mostrar total ticket
 		totalticket=floristeria_control.CalcTotalTicket(id_ticket);
-		System.out.println("La venta id= " + id_ticket + " asciende a un total de "+totalticket + " euros.");
+		System.out.println("La venta del ticket id = " + id_ticket + " asciende a un total de "+ totalticket + " euros.");
 	}
 	
 	private void MostrarStock() {
