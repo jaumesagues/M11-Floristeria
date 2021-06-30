@@ -225,6 +225,11 @@ public class Floristeria {
 	public String getMensajeValorTotal() {
 		return "Valor de la floristeria '" + nombreFloristeria +"' con id: " + idFloristeria + "\n" + nombreFloristeria + " Precio total -> " + valorProductos() + " €";
 	}
+	
+	public double getValorTotalTickets() {
+		
+		return tickets.stream().mapToDouble(ticket->ticket.getValorTicket()).sum();
+	}
 
 	public String getMensajeStock() {
 		return "Stock de la floristeria con id: " + idFloristeria + " \n " + nombreFloristeria + 
