@@ -81,22 +81,31 @@ public class Floristeria {
 	//		Segundo: numTipoProducto -> 0 (arbol), 1(flor), 2(decoracion)
 	//		Tercero: idProducto -> el id del producto
 	
-	public void sellProduct(int idTicket, TipoProducto tipo_producto, int idProducto) {
-		Ticket ticket = getTicketById(idTicket);								//ticket de la compra actual
+	public void sellProduct(int idTicket, TipoProducto tipo_producto, int idProducto) throws Exception {
+		Ticket ticket = getTicketById(idTicket);								
 		
-		if(tipo_producto == TipoProducto.ARBOL) {		//IF-ELSEIF para cada uno de los 3 productos
-			deleteArbolById(idProducto);										//elimino del "stock"
-			ticket.addProductToList(getArbolById(idProducto));					//lo añado al ticket actual
+		if(tipo_producto == TipoProducto.ARBOL) {
+			
+			if(getArbolById(idProducto)==null) throw new Exception("No se puede vender el producto. El id del arbol no existe");
+			
+			ticket.addProductToList(getArbolById(idProducto));
+			deleteArbolById(idProducto);										
 			System.out.println("Añadido producto al ticket");
 			
 		}else if(tipo_producto==TipoProducto.FLOR) {
-			deleteFlorById(idProducto);
+			
+			if(getFlorById(idProducto)==null) throw new Exception("No se puede vender el producto. El id de la flor no existe");
+			
 			ticket.addProductToList(getFlorById(idProducto));
+			deleteFlorById(idProducto);
 			System.out.println("Añadido producto al ticket");
 			
 		}else if(tipo_producto==TipoProducto.DECORACION) {
-			deleteDecoracionById(idProducto);
+			
+			if(getDecoracionById(idProducto)==null) throw new Exception("No se puede vender el producto. El id de la decoracion no existe");
+			
 			ticket.addProductToList(getDecoracionById(idProducto));
+			deleteDecoracionById(idProducto);
 			System.out.println("Añadido producto al ticket");
 			
 		}else System.err.println("El producto no corresponde con ninguno de los productos de la Floristeria");
@@ -106,8 +115,8 @@ public class Floristeria {
 	public void deleteFlorById(int id) {
 
 		if (!getFlores().isEmpty()) {
-		flores.remove(getFlorById(id));
-		System.out.println("Eliminada flor");
+			flores.remove(getFlorById(id));
+			System.out.println("Eliminada flor");
 
 		} else System.err.println("La lista de flores se encuentra vacía");
 	}
