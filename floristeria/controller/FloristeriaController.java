@@ -122,7 +122,7 @@ public class FloristeriaController {
 	public int IniciarVentaProductos() {
 		int id_ticket=1;
 		
-		//id_ticket=floristeria.createTicket();
+		id_ticket=floristeria.createTicket();
 		return id_ticket;
 	}
 	
@@ -131,7 +131,7 @@ public class FloristeriaController {
 	}
 	
 	public double CalcTotalTicket(int id_ticket) {
-		return 0.0;
+		return floristeria.getTicketById(id_ticket).getValorTicket();
 	}
 	
 	public String GetStockFloristeria() {
@@ -140,5 +140,9 @@ public class FloristeriaController {
 	
 	public String GetValorTotalFloristeria() {
 		return floristeria.getMensajeValorTotal();
+	}
+	
+	public double GetTotalVentasFloristeria() {
+		return floristeria.getValorTotalTickets();
 	}
 }

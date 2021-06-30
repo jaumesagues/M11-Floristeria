@@ -40,7 +40,7 @@ public class InterficieConsola {
 				MostrarStock();
 				break;
 			case 5:
-				//MostrarVentas();
+				MostrarValorTotalVentas();
 				break;
 			case 6:
 				MostrarValorTotal();
@@ -273,8 +273,8 @@ public class InterficieConsola {
 		
 		// Crear ticket
 		id_ticket=floristeria_control.IniciarVentaProductos();
-		//Añadir productos
 		
+		//Añadir productos
 		do {
 			menu_producto_opcio=menu_productos.showMenu();
 			if (menu_producto_opcio==3) {
@@ -299,9 +299,7 @@ public class InterficieConsola {
 					break;
 				}
 				id_producto=pedirInteger(titulo, mensaje,-1);
-				if (id_producto==-1) {
-					terminar_venta=true;
-				} else {
+				if (id_producto!=-1) {
 					try {
 						floristeria_control.VenderProducto(id_ticket, tipo_producto, id_producto);
 						switch (tipo_producto) {
@@ -334,6 +332,16 @@ public class InterficieConsola {
 		}
 		
 		System.out.println(floristeria_control.GetStockFloristeria());
+	}
+	
+	private void MostrarValorTotalVentas() {
+		if (!floristeria_control.IsFloristeriaCreada()) {
+			System.err.println("No es posible mostrar el stock de la floristería porque NO ha sido creada todavía.");
+			return;
+		}
+		
+		System.out.println("El valor total de las ventas realizadas es de "+ 
+		floristeria_control.GetTotalVentasFloristeria() + " euros.");
 	}
 	
 	private void MostrarValorTotal() {
