@@ -86,25 +86,31 @@ public class Floristeria {
 		
 		if(tipo_producto == TipoProducto.ARBOL) {
 			
-			if(getArbolById(idProducto)==null) throw new Exception("No se puede vender el producto. El id del arbol no existe");
+			Arbol arbol = getArbolById(idProducto);
 			
-			ticket.addProductToList(getArbolById(idProducto));
+			if(arbol==null) throw new Exception("No se puede vender el producto. El id del arbol no existe");
+			
+			ticket.addProductToList(arbol);
 			deleteArbolById(idProducto);										
 			System.out.println("Añadido producto al ticket");
 			
 		}else if(tipo_producto==TipoProducto.FLOR) {
 			
-			if(getFlorById(idProducto)==null) throw new Exception("No se puede vender el producto. El id de la flor no existe");
+			Flor flor = getFlorById(idProducto);
 			
-			ticket.addProductToList(getFlorById(idProducto));
+			if(flor==null) throw new Exception("No se puede vender el producto. El id de la flor no existe");
+			
+			ticket.addProductToList(flor);
 			deleteFlorById(idProducto);
 			System.out.println("Añadido producto al ticket");
 			
 		}else if(tipo_producto==TipoProducto.DECORACION) {
 			
-			if(getDecoracionById(idProducto)==null) throw new Exception("No se puede vender el producto. El id de la decoracion no existe");
+			Decoracion decoracion = getDecoracionById(idProducto);
 			
-			ticket.addProductToList(getDecoracionById(idProducto));
+			if(decoracion==null) throw new Exception("No se puede vender el producto. El id de la decoracion no existe");
+			
+			ticket.addProductToList(decoracion);
 			deleteDecoracionById(idProducto);
 			System.out.println("Añadido producto al ticket");
 			
