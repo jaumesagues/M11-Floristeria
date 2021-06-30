@@ -126,7 +126,7 @@ public class FloristeriaController {
 		return id_ticket;
 	}
 	
-	public void VenderProducto(int id_ticket, TipoProducto tipo_producto, int id_producto) {
+	public void VenderProducto(int id_ticket, TipoProducto tipo_producto, int id_producto) throws Exception {
 		floristeria.sellProduct(id_ticket, tipo_producto, id_producto);
 	}
 	
